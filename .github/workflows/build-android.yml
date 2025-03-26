@@ -1,0 +1,29 @@
+name: Build Android APK  
+on:  
+  push:  
+    branches: [ main ]  # 仅在 main 分支推送代码时触发  
+  pull_request:  
+    branches: [ main ]  
+jobs:  
+  build:  
+    runs-on: ubuntu-latest  # 使用最新 Ubuntu 系统环境  
+    steps:  
+      - name: Checkout code  
+        uses: actions/checkout@v4  # 拉取代码到工作流环境‌:ml-citation{ref="2,8" data="citationList"}  
+
+      - name: Set up JDK  
+        uses: actions/setup-java@v3  
+        with:  
+          java-version: 11  # 指定 JDK 版本（Android 推荐 Java 11）‌:ml-citation{ref="2,4" data="citationList"}  
+
+      - name: Grant Gradle permissions  
+        run: chmod +x gradlew  # 赋予 Gradle Wrapper 执行权限‌:ml-citation{ref="4,8" data="citationList"}  
+
+      - name: Build Release APK  
+        run: ./gradlew :app:assembleRelease  # 仅编译安卓 Release APK‌:ml-citation{ref="2,8" data="citationList"}  
+
+      - name: Upload APK  
+        uses: actions/upload-artifact@v3  
+        with:  
+          name: app-release.apk  
+          path: app/build/outputs/apk/release/app-release.apk  # 上传 APK 至 Artifacts‌:ml-citation{ref="2,8" data="citationList"}  
